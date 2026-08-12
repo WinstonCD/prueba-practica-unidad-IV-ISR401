@@ -1,0 +1,570 @@
+% =====================================================================
+% Actividad práctica - Ingeniería de Requisitos (ISR-401) -- UTEQ
+% Adaptación al formato institucional del documento de referencia.
+% El contenido de las actividades corresponde únicamente al trabajo realizado.
+% =====================================================================
+\documentclass[11pt,a4paper,oneside]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\renewcommand{\tablename}{Tabla}
+\renewcommand{\figurename}{Figura}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{textcomp}
+
+\usepackage[a4paper,top=2.4cm,bottom=2.3cm,left=2.5cm,right=2.3cm,headheight=15pt]{geometry}
+
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage[table,dvipsnames]{xcolor}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{colortbl}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage[protrusion=true,expansion=false]{microtype}
+\usepackage{parskip}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{caption}
+\usepackage{pdflscape}
+\usepackage[most]{tcolorbox}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,shapes.geometric,shapes.multipart,calc}
+
+% Paleta institucional
+\definecolor{darkblue}{HTML}{1A3A5C}
+\definecolor{midblue}{HTML}{2E6DA4}
+\definecolor{gold}{HTML}{C8A951}
+\definecolor{lightgray}{HTML}{F2F2F2}
+\definecolor{rowgray}{HTML}{EEEEEE}
+\definecolor{softblue}{HTML}{EAF1F8}
+\definecolor{softred}{HTML}{F7E7E7}
+\definecolor{darkred}{HTML}{9C2A2A}
+\definecolor{softgreen}{HTML}{E7F1E7}
+
+\linespread{1.05}
+\setlength{\parskip}{5pt}
+\setlength{\parindent}{0pt}
+\renewcommand{\arraystretch}{1.25}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+
+\titleformat{\section}{\sffamily\large\bfseries\color{darkblue}}{\thesection}{0.6em}{}
+[\vspace{-5pt}{\color{gold!85}\rule{\linewidth}{1pt}}]
+\titleformat{\subsection}{\sffamily\normalsize\bfseries\color{midblue}}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}{\sffamily\normalsize\bfseries\color{midblue}}{\thesubsubsection}{0.5em}{}
+
+\titlespacing*{\section}{0pt}{14pt}{6pt}
+\titlespacing*{\subsection}{0pt}{10pt}{3pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\footnotesize\sffamily\color{darkblue}Actividad Práctica\, \textbullet\, Unidad IV}
+\fancyhead[R]{\footnotesize\sffamily\color{darkblue}Ingeniería de Requisitos\, \textbullet\, ISR-401}
+\fancyfoot[C]{\footnotesize\sffamily\color{darkblue}\thepage}
+
+\captionsetup{font=small,labelfont={bf,sf,color=darkblue},labelsep=period,skip=5pt}
+
+\newtcolorbox{concepto}[1]{
+  colback=softblue,colframe=darkblue,boxrule=0.6pt,arc=2.5pt,
+  left=7pt,right=7pt,top=5pt,bottom=5pt,
+  fonttitle=\bfseries\sffamily\color{white},
+  coltitle=white,colbacktitle=darkblue,title={#1},breakable
+}
+
+\newcommand{\hd}[1]{\cellcolor{darkblue}\textbf{\textcolor{white}{\small\sffamily #1}}}
+\newcommand{\hm}[1]{\cellcolor{midblue}\textbf{\textcolor{white}{\small\sffamily #1}}}
+\newcommand{\hg}[1]{\cellcolor{lightgray}\textbf{\color{darkblue}\small\sffamily #1}}
+
+\begin{document}
+\sffamily
+
+% Portada breve
+\begin{center}
+  {\Large\bfseries\color{darkblue} UNIVERSIDAD TÉCNICA ESTATAL DE QUEVEDO}\\[2pt]
+  {\normalsize\color{midblue} Facultad de Ciencias de la Ingeniería \textbullet\ Carrera de Ingeniería de Software}\\[6pt]
+  {\color{gold}\rule{0.9\linewidth}{1.2pt}}\\[6pt]
+  {\large\bfseries\color{darkblue} ACTIVIDAD PRÁCTICA --- UNIDAD IV}\\[2pt]
+  {\normalsize\color{darkblue} Validación, Gestión, Herramientas y Estándares de Requisitos}\\[2pt]
+  {\small\color{black} Asignatura: Ingeniería de Requisitos (ISR-401)}
+\end{center}
+
+\vspace{2pt}
+\begin{center}\small
+\begin{tabularx}{\linewidth}{@{}L{2.6cm} X L{2.6cm} X@{}}
+  \hg{Estudiante} & Cedeño Ávila Winston Damián & \hg{Fecha} & 12/8/26 \\
+  \hg{Nivel} & 4to semestre Software ``B'' & \hg{Modalidad} & Práctica individual \\
+\end{tabularx}
+\end{center}
+
+\begin{concepto}{Contenido presentado}
+El documento conserva únicamente el desarrollo realizado en la actividad transcrita, adaptándolo al formato visual y estructural del documento de referencia.
+\end{concepto}
+
+\section*{P1. Modelo de datos -- Diagrama de Clases}
+
+% Diagrama correspondiente a P1
+\begin{figure}[H]
+\centering
+
+\begin{tikzpicture}[
+    class/.style={
+        draw,
+        rectangle,
+        minimum width=5.0cm,
+        text width=4.8cm,
+        align=left,
+        font=\small,
+        inner sep=6pt
+    },
+    arrow/.style={-{Stealth}}
+]
+
+% ---------------- PACIENTE ----------------
+\node[class] (paciente) at (0,3.5) {%
+\centering\textbf{Paciente}\\[-2pt]
+\noindent\rule{\linewidth}{0.4pt}\\
+\raggedright
+\underline{Cedula} : String\\
+P.nombre : String\\
+Correo : String\\[-2pt]
+\noindent\rule{\linewidth}{0.4pt}\\
+SolicitarCita() : Cita
+};
+
+% ---------------- CITA ----------------
+\node[class] (cita) at (7,3.5) {%
+\centering\textbf{Cita}\\[-2pt]
+\noindent\rule{\linewidth}{0.4pt}\\
+\raggedright
+\underline{idCita} : int\\
+FechaHora : DateTime\\
+Estado : String\\[-2pt]
+\noindent\rule{\linewidth}{0.4pt}\\
+Cancelar() : void\\
+Confirmar() : void
+};
+
+% ---------------- MEDICO ----------------
+\node[class] (medico) at (0,-2.5) {%
+\centering\textbf{Medico}\\[-2pt]
+\noindent\rule{\linewidth}{0.4pt}\\
+\raggedright
+\underline{Codigo} : String\\
+M.nombre : String\\
+especialidad : String\\[-2pt]
+\noindent\rule{\linewidth}{0.4pt}\\
+Verificar Cupo(Cupo:Cupo) : bool
+};
+
+% ---------------- CUPO ----------------
+\node[class] (cupo) at (7,-2.5) {%
+\centering\textbf{Cupo}\\[-2pt]
+\noindent\rule{\linewidth}{0.4pt}\\
+\raggedright
+FechaHora : DateTime\\
+disponibilidad : bool\\[-2pt]
+\noindent\rule{\linewidth}{0.4pt}\\
+reservar() : void
+};
+
+% ---------------- RELACIONES ----------------
+
+% Paciente -- Cita
+\draw (paciente.east) -- (cita.west)
+    node[pos=0.15, above] {1}
+    node[pos=0.85, above] {0..*};
+
+% Cita -- Médico
+\draw (cita.south west) -- (medico.north east)
+    node[pos=0.20, left] {0..*}
+    node[pos=0.80, right] {1};
+
+% Médico -- Cupo
+\draw (medico.east) -- (cupo.west)
+    node[pos=0.15, above] {1}
+    node[pos=0.85, above] {0..*};
+
+% Cita -- Cupo
+\draw[arrow]
+    (cita.east) -- ++(1.0,0)
+    -- ++(0,-3.7)
+    -- (cupo.east);
+    
+\end{tikzpicture}
+
+\caption{Figura 1. Diagrama de clases}
+\end{figure}
+
+\section*{P2. Diagrama de actividades -- Agendar Cita}
+
+% Diagrama correspondiente a P2
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    activity/.style={
+        draw,
+        rectangle,
+        rounded corners=2pt,
+        minimum width=4.4cm,
+        minimum height=1.1cm,
+        align=center,
+        font=\small
+    },
+    decision/.style={
+        draw,
+        diamond,
+        aspect=2,
+        align=center,
+        font=\small,
+        inner sep=8pt,
+        minimum width=3.8cm
+    },
+    flow/.style={
+        -{Stealth},
+        line width=0.7pt
+    },
+    etiqueta/.style={
+        font=\small,
+        fill=white,
+        inner sep=1pt
+    }
+]
+
+% =========================================================
+% CARRILES HORIZONTALES
+% =========================================================
+\draw (0,9) rectangle (19.5,0);
+\draw (0,6.0) -- (19.5,6.0);
+\draw (16.6,9) -- (16.6,0);
+\node[font=\bfseries] at (18.05,7.5) {PACIENTE};
+\node[font=\bfseries] at (18.05,3.0) {SISTEMA};
+
+% =========================================================
+% PACIENTE
+% =========================================================
+\node[circle, fill=black, minimum size=8pt, inner sep=0pt] (inicio) at (5,8.3) {};
+\draw[flow] (inicio.south) -- (5,7.6);
+
+\node[activity] (solicitar) at (5,7.05) {Solicitar Cita};
+
+% Paciente -> Sistema
+\draw[flow] (solicitar.south) -- (5,5.35);
+
+% =========================================================
+% SISTEMA
+% =========================================================
+\node[activity] (verificar) at (5,4.85) {Verificar Cupo};
+
+% =========================================================
+% DECISIÓN (alineada verticalmente con Verificar Cupo)
+% =========================================================
+\node[decision] (decision) at (5,3.0) {¿Cupo\\disponible?};
+
+\draw[flow] (verificar.south) -- (decision.north);
+
+% =========================================================
+% RAMA SÍ
+% =========================================================
+\node[activity] (confirmar) at (2.4,1.2) {Confirmar Cita};
+
+\draw[flow]
+    (decision.west) -| node[etiqueta, pos=0.25, above] {Sí} (confirmar.north);
+% =========================================================
+% RAMA NO
+% =========================================================
+\node[activity, minimum width=5cm] (notificar) at (11.5,3.0) {Notificar no\\disponibilidad};
+
+\draw[flow]
+    (decision.east) -- node[etiqueta, midway, above] {No} (notificar.west);
+
+% =========================================================
+% PROPONER HORARIO
+% =========================================================
+\node[activity, minimum width=5cm] (proponer) at (11.5,1.2) {Proponer horario};
+
+\draw[flow] (notificar.south) -- (proponer.north);
+
+% =========================================================
+% NODO FINAL (centrado entre las dos ramas)
+% =========================================================
+\node[circle, draw, minimum size=18pt, inner sep=0pt] (fin) at (6.95,0.4) {};
+\node[circle, fill=black, minimum size=8pt, inner sep=0pt] at (fin.center) {};
+
+\draw[flow] (confirmar.south) -- (2.4,0.4) -- (fin.west);
+\draw[flow] (proponer.south) -- (11.5,0.4) -- (fin.east);
+
+\end{tikzpicture}
+\caption{Diagrama de actividades: Agendar cita}
+\label{fig:diagrama_actividades_agendar_cita}
+\end{figure}
+
+\section*{P3. Maquina de estado de citas}
+
+% Diagrama correspondiente a P3
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    state/.style={
+        draw,
+        rectangle,
+        minimum width=3.6cm,
+        minimum height=0.9cm,
+        align=center,
+        font=\small
+    },
+    flow/.style={-{Stealth}, line width=0.7pt},
+    etiqueta/.style={font=\small, fill=white, inner sep=2pt},
+    note/.style={font=\footnotesize, align=left}
+]
+
+% =========================================================
+% ESTADO INICIAL
+% =========================================================
+\node[circle, fill=black, minimum size=8pt, inner sep=0pt] (inicio) at (2.6,13.0) {};
+
+% =========================================================
+% SOLICITADA
+% =========================================================
+\node[state] (solicitada) at (2.6,11.5) {Solicitada};
+\draw[flow] (inicio.south) -- (solicitada.north);
+
+\node[note] at (7.3,11.9) {Cita creada por\\el paciente};
+
+% =========================================================
+% REGIÓN COMPUESTA "ACTIVA"
+% =========================================================
+\draw (0,4.6) rectangle (8.6,9.6);
+\node[font=\bfseries, anchor=north west] at (0.2,9.4) {Activa};
+
+% =========================================================
+% CONFIRMADA
+% =========================================================
+\node[state] (confirmada) at (2.6,8.2) {Confirmada};
+\draw[flow] (solicitada.south) -- node[etiqueta, midway, right] {cupo disponible} (confirmada.north);
+
+% =========================================================
+% CANCELADA (fuera de la región Activa)
+% =========================================================
+\node[state] (cancelada) at (12.8,8.2) {Cancelada};
+\draw[flow] (confirmada.east) -- node[etiqueta, midway, above] {cancelar} (cancelada.west);
+
+\node[note] at (12.8,9.9) {Cita cancelada\\por el paciente};
+
+% =========================================================
+% NO ASISTIDA
+% =========================================================
+\node[state] (noasistida) at (5.6,6.0) {No asistida};
+\draw[flow] (confirmada.south) -- node[etiqueta, pos=0.35, right] {no se presenta} (noasistida.north);
+
+\node[note] at (10.8,6.0) {Paciente no se\\presentó a la cita};
+
+% =========================================================
+% ATENDIDA
+% =========================================================
+\node[state] (atendida) at (2.6,1.8) {Atendida};
+\draw[flow]
+    (confirmada.west)
+    -- ++(-1.3,0)
+    |- node[etiqueta, pos=0.75, left] {atender}
+    (atendida.west);
+
+\node[note] at (-2.4,1.8) {Cita atendida\\por el médico};
+
+% =========================================================
+% NODO FINAL ÚNICO
+% =========================================================
+\node[circle, draw, minimum size=17pt, inner sep=0pt] (fin) at (5.6,0.3) {};
+\node[circle, fill=black, minimum size=8pt, inner sep=0pt] at (fin.center) {};
+
+\draw[flow] (atendida.south) -- (2.6,0.3) -- (fin.west);
+\draw[flow] (noasistida.south) -- (5.6,0.3) -- (fin.north);
+\draw[flow] (cancelada.south) -- (12.8,0.3) -- (fin.east);
+
+\end{tikzpicture}
+\caption{Máquina de estados de Cita}
+\end{figure}
+
+\section*{P4. Verificación cruzada}
+
+\begin{longtable}{|p{0.29\textwidth}|p{0.29\textwidth}|p{0.34\textwidth}|}
+\hline
+\textbf{Evento P3} & \textbf{Acción P2} & \textbf{Modificación P3} \\ \hline
+Solicitar Cita & Solicitar Cita & Cita. estado \\ \hline
+Cupo disponible & Verificar Cupo & Cupo. disponibilidad \\ \hline
+Confirmar & Confirmar Cita & Cita. estado \\ \hline
+Cancelar & Cancelar cita & Cita. estado \\ \hline
+Atender & Atender cita & Cita. estado \\ \hline
+No se presenta & Registrar inasistencia & Cita. estado \\ \hline
+\end{longtable}
+
+\textbf{Inconsistencia encontrada:} P3 tenía ``Atender'', pero P2 no lo mostraba.
+
+\textbf{corrección:} Se agrega la accion atender cita al proceso.
+
+\section*{P5. Requisitos}
+
+\subsection*{RF01 -- Agendar cita}
+
+\begin{tabular}{|p{0.32\textwidth}|p{0.55\textwidth}|}
+\hline
+\textbf{Tipo} & Funcional \\ \hline
+\textbf{Prioridad} & Alta \\ \hline
+\textbf{Estado} & Probado \\ \hline
+\textbf{Fuente} & Clínica \\ \hline
+\textbf{Estabilidad} & Estable \\ \hline
+\textbf{Versión} & 1.0 \\ \hline
+\textbf{Verificación} & Prueba funcional \\ \hline
+\end{tabular}
+
+El sistema deberá permitir registrar una cita únicamente cuando exista un cupo disponible.
+
+\subsection*{RF02 -- Cancelar cita}
+
+\begin{tabular}{|p{0.32\textwidth}|p{0.55\textwidth}|}
+\hline
+\textbf{Tipo} & Funcional \\ \hline
+\textbf{Prioridad} & Alta \\ \hline
+\textbf{Estado} & Probado \\ \hline
+\textbf{Fuente} & Clínica \\ \hline
+\textbf{Estabilidad} & Estable \\ \hline
+\textbf{Versión} & 1.0 \\ \hline
+\textbf{Verificación} & Prueba funcional \\ \hline
+\end{tabular}
+
+El sistema deberá permitir cancelar una cita confirmada que aún no haya sido atendida.
+
+\subsection*{RNF01 -- Eficiencia de desempeño}
+
+\begin{tabular}{|p{0.32\textwidth}|p{0.55\textwidth}|}
+\hline
+\textbf{Prioridad} & Alta \\ \hline
+\textbf{Estado} & Probado \\ \hline
+\textbf{Fuente} & Clínica \\ \hline
+\textbf{Estabilidad} & Estable \\ \hline
+\textbf{Versión} & 1.0 \\ \hline
+\textbf{Verificación} & Prueba de rendimiento \\ \hline
+\end{tabular}
+
+El sistema deberá registrar una cita en menos de 3 segundos.
+
+\subsection*{RNF02 -- Seguridad}
+
+\begin{tabular}{|p{0.32\textwidth}|p{0.55\textwidth}|}
+\hline
+\textbf{Prioridad} & Alta \\ \hline
+\textbf{Estado} & Probado \\ \hline
+\textbf{Fuente} & Clínica \\ \hline
+\textbf{Estabilidad} & Estable \\ \hline
+\textbf{Versión} & 1.0 \\ \hline
+\textbf{Verificación} & Prueba de seguridad \\ \hline
+\end{tabular}
+
+El sistema deberá restringir el acceso a los datos personales únicamente a usuarios autorizados.
+
+\section*{P6. MoSCoW}
+
+\begin{tabular}{|p{0.20\textwidth}|p{0.20\textwidth}|p{0.48\textwidth}|}
+\hline
+\textbf{Req} & \textbf{Categoría} & \textbf{Justificación} \\ \hline
+RF01 & Must & Es esencial para agendar citas \\ \hline
+RF02 & Must & Necesario para administrar las citas \\ \hline
+RNF01 & Should & Garantiza rapidez del sistema \\ \hline
+RNF02 & Must & Protege los datos personales \\ \hline
+\end{tabular}
+
+\section*{P7. Validación 29148}
+
+\begin{tabular}{|p{0.18\textwidth}|p{0.72\textwidth}|}
+\hline
+\textbf{Req} & \textbf{Defecto} \\ \hline
+RF01 & Inicialmente no indicaba Claramente que ocurre si no existe cupo \\ \hline
+RF02 & Inicialmente no especificaba que la cita debía estar sin atender \\ \hline
+RNF01 & La métrica no estaba definida Inicialmente \\ \hline
+RNF02 & No indicaba quién puede acceder a los datos \\ \hline
+\end{tabular}
+
+\vspace{0.3cm}
+
+Los cuatro requisitos fueron corregidos agregando condiciones, métricas y criterios verificables.
+
+\section*{P8. Pruebas de aceptación}
+
+\begin{tabular}{|p{0.17\textwidth}|p{0.22\textwidth}|p{0.49\textwidth}|}
+\hline
+\textbf{Prueba} & \textbf{Tipo} & \textbf{Entrada} \\ \hline
+PA01 & Funcional & Paciente + Cupo disponible \\ \hline
+PA02 & Funcional & Cita confirmada \\ \hline
+PA03 & No funcional & Solicitud de cita \\ \hline
+PA04 & Seguridad & Usuario autorizado / no \\ \hline
+\end{tabular}
+
+\vspace{0.3cm}
+
+\begin{tabular}{|p{0.22\textwidth}|p{0.50\textwidth}|p{0.18\textwidth}|}
+\hline
+\textbf{Prueba} & \textbf{Éxito} & \textbf{Req} \\ \hline
+PA01 & Cita confirmada & RF01 \\ \hline
+PA02 & Cita cancelada & RF02 \\ \hline
+PA03 & Respuesta $\leq$ 3 seg & RNF01 \\ \hline
+PA04 & Solo autorizado accede & RNF02 \\ \hline
+\end{tabular}
+
+\section*{P9. Matriz de trazabilidad}
+
+\begin{tabular}{|p{0.18\textwidth}|p{0.18\textwidth}|p{0.30\textwidth}|p{0.20\textwidth}|}
+\hline
+\textbf{Req} & \textbf{Fuente} & \textbf{Modelo} & \textbf{Prueba} \\ \hline
+RF01 & Clínica & P1, P2, P3 & PA01 \\ \hline
+RF02 & Clínica & P1, P3 & PA02 \\ \hline
+RNF01 & Clínica & P1 & PA03 \\ \hline
+RNF02 & Clínica & P1 & PA04 \\ \hline
+\end{tabular}
+
+\vspace{0.3cm}
+
+\textbf{Dependencia horizontal:} RF01 $\rightarrow$ RF02, porque una cita primero debe existir para poder cancelarla.
+
+\textbf{Requisitos huérfanos:} ninguno.
+
+\section*{P10. Gestión del cambio y línea base}
+
+\textbf{Solicitud de cambio:} Se solicita modificar RNF01 de $\leq$ 3 seg a $\leq$ 2 seg.
+
+\textbf{Impacto:} afecta P5, P6, P8 y P9.
+
+\textbf{Decisión del CCB:} aprobado $\checkmark$
+
+\textbf{Nueva versión:} RNF01 V1.1
+
+\subsection*{Línea base}
+
+\textbf{ERS V1.1}
+
+\begin{tabular}{|p{0.12\textwidth}|p{0.50\textwidth}|p{0.20\textwidth}|}
+\hline
+\textbf{Req} & \textbf{Elemento} & \textbf{Versión} \\ \hline
+P1 & Clases & V1.0 \\ \hline
+P2 & Actividades & V1.0 \\ \hline
+P3 & Estados & V1.0 \\ \hline
+P4 & Consistencia & V1.0 \\ \hline
+P5 & Requisitos & V1.1 \\ \hline
+P6 & MoSCoW & V1.0 \\ \hline
+P7 & Validación & V1.0 \\ \hline
+P8 & Pruebas & V1.1 \\ \hline
+P9 & Trazabilidad & V1.1 \\ \hline
+\end{tabular}
+
+\vspace{0.5cm}
+
+\textbf{Línea base:} Conjunto de documentos y modelos aprobados que se quedan congelados hasta que se apruebe otro cambio.
+
+
+\end{document}
